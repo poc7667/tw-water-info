@@ -12,9 +12,13 @@ class ReservoirsScreen < PM::TableScreen
           {
             title: reservoir["title"],
             action: :select_reservoir,
+            image:{
+              image: reservoir["image"],
+              radius: 15
+              },
             arguments: { reservoir: reservoir["title"] }
           }
-        end        
+        end
     }]
   end
 
@@ -30,6 +34,7 @@ class ReservoirsScreen < PM::TableScreen
   end  
 
   def get_reserviors
+    # https://github.com/washwashsleep/TaiwanReservoirAPI
     url_string = "http://128.199.223.114:10080/"
     AFMotion::JSON.get(url_string) do |result|
       if result.success?
@@ -38,8 +43,8 @@ class ReservoirsScreen < PM::TableScreen
         sorted_data.each do |r|
           $returned_data << {
             "title" => [r["reservoirName"], r["immediatePercentage"]].join(":"),
-            "value" => get_percentage(h["immediatePercentage"]),
-            "image" => get_image_by_percentage(get_percentage(h["immediatePercentage"]))
+            "value" => get_percentage(r["immediatePercentage"]),
+            "image" => WaterImage.get_image_by_percentage(get_percentage(r["immediatePercentage"]))
           }
         end
         update_table_data
@@ -47,12 +52,9 @@ class ReservoirsScreen < PM::TableScreen
     end 
   end
 
-  private
-    def get_percentage(data)
-      data.scan(/\d+\.\d+/).first.to_f
-    end
+  def get_percentage(data)
+    return data.scan(/\d+\.\d+/).first.to_f
+  end
 
-    def get_image_by_percentage(percentage)
-      
-    end
+
 end
