@@ -11,6 +11,7 @@ class ReservoirsScreen < PM::TableScreen
         cells: $returned_data.map do |reservoir|
           {
             title: reservoir["title"],
+            subtitle: reservoir["delta"],
             action: :select_reservoir,
             image:{
               image: reservoir["image"],
@@ -41,15 +42,28 @@ class ReservoirsScreen < PM::TableScreen
         $returned_data = []
         sorted_data = result.object["data"].sort_by{|h| get_percentage(h["immediatePercentage"])}
         sorted_data.each do |r|
-          $returned_data << {
+          reservoir = {
             "title" => [r["reservoirName"], r["immediatePercentage"]].join(":"),
             "value" => get_percentage(r["immediatePercentage"]),
+            "income" => r["daliyInflow"].to_f - r["daliyOverflow"].to_f ,
+            "baseAvailable" => r["baseAvailable"].gsub(',', '').to_f,
             "image" => WaterImage.get_image_by_percentage(get_percentage(r["immediatePercentage"]))
           }
+          reservoir["delta"] = get_delta(reservoir)
+          $returned_data << reservoir
         end
         update_table_data
       end      
     end 
+  end
+
+  def get_delta(reservoir)
+    delta = (100*reservoir["income"]/reservoir["baseAvailable"]).round(2)
+    if delta.abs > 0.0001
+      return delta.to_s + " %"
+    else
+      return  "Not enough data"
+    end
   end
 
   def get_percentage(data)
