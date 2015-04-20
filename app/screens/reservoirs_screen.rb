@@ -34,14 +34,25 @@ class ReservoirsScreen < PM::TableScreen
     AFMotion::JSON.get(url_string) do |result|
       if result.success?
         $returned_data = []
-        sorted_data = result.object["data"].sort_by{|h| h["immediatePercentage"].scan(/\d+\.\d+/).first.to_f}
+        sorted_data = result.object["data"].sort_by{|h| get_percentage(h["immediatePercentage"])}
         sorted_data.each do |r|
           $returned_data << {
-            "title" => [r["reservoirName"], r["immediatePercentage"]].join(":")
+            "title" => [r["reservoirName"], r["immediatePercentage"]].join(":"),
+            "value" => get_percentage(h["immediatePercentage"]),
+            "image" => get_image_by_percentage(get_percentage(h["immediatePercentage"]))
           }
         end
         update_table_data
       end      
     end 
   end
+
+  private
+    def get_percentage(data)
+      data.scan(/\d+\.\d+/).first.to_f
+    end
+
+    def get_image_by_percentage(percentage)
+      
+    end
 end
