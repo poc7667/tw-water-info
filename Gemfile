@@ -6,15 +6,14 @@ gem 'rake'
 gem 'ProMotion', '~> 2.0'
 
 gem "motion-kit", "~> 0.10"  
-gem "sugarcube", "~> 1.6", require: ["sugarcube-color", "sugarcube-uikit"]
+gem "sugarcube", "~> 1.6", require: ["sugarcube-color", "sugarcube-uikit", 'sugarcube-common' ]
+gem 'afmotion'
 
 # gem 'ProMotion-menu', '~> 1.0' # PM::Menu
 # gem 'ProMotion-form', '~> 0.3' # PM::FormScreen
 # gem 'ProMotion-push', '~> 0.3' # Push Notifications
 # gem 'ProMotion-map', '~> 0.5'  # PM::MapScreen
 
-# Awesome gem that adds a ton of helpers.
-# gem 'sugarcube', require: [ 'sugarcube-common' ]
 
 # Layout and styling gem
 # gem 'motion-kit', '~> 0.17'
@@ -32,4 +31,6 @@ gem "sugarcube", "~> 1.6", require: ["sugarcube-color", "sugarcube-uikit"]
 # gem 'motion-juxtapose', '~> 0.2'
 
 # Awesome Print
-# gem 'awesome_print_motion', '~> 0.1'
+gem 'awesome_print_motion', '~> 0.1'
+
+gem "bubble-wrap", "~> 1.3.0.osx"
