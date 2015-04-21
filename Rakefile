@@ -7,7 +7,9 @@ Bundler.require
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
-  app.name = 'water_info'
+
+  app.name = 'water_info'  
+  app.icons = ["water-drop.png"]
   app.info_plist['UILaunchImages'] = [
    {
      'UILaunchImageName' => 'water_info_logo',
