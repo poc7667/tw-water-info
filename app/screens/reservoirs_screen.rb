@@ -1,6 +1,12 @@
 class ReservoirsScreen < PM::TableScreen
   refreshable callback: :on_refresh
   title "台灣水庫水情資訊"
+  def on_init
+    # set_tab_bar_item system_item: UITabBarSystemItemMostViewed, title: "Custom"
+    set_tab_bar_item title: "水庫資訊", item: "tabs_icon/show-all.png"
+    # set_tab_bar_item title: "Contacts123", system_icon: UITabBarSystemItemContacts
+    # title: "Custom", item: "test.jpeg"
+  end
   def on_load
     $returned_data = [{title: 'nil'}]
     on_refresh
