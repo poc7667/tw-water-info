@@ -1,6 +1,10 @@
 class HelpScreen < PM::TableScreen
   title "Help"
 
+  def on_init
+    set_tab_bar_item title: "設定", item: "tabs_icon/shortage-info"
+  end
+
   def table_data
     [{
       title: "About",
