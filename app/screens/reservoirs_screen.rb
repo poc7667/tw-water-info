@@ -1,10 +1,17 @@
 class ReservoirsScreen < PM::TableScreen
   refreshable callback: :on_refresh
-  title "台灣水庫水情資訊"
+  title "台灣水庫資訊"
+
+  def on_init
+    set_nav_bar_button :right, title: "Help", action: :show_help
+    set_tab_bar_item title: "水庫資訊", item: "tabs_icon/show-all.png"
+  end
+
   def on_load
     $returned_data = [{title: 'nil'}]
     on_refresh
   end
+
 
   def table_data
     [{
@@ -69,6 +76,5 @@ class ReservoirsScreen < PM::TableScreen
   def get_percentage(data)
     return data.scan(/\d+\.\d+/).first.to_f
   end
-
 
 end
