@@ -1,6 +1,10 @@
 
 schema "0001 initial" do
 
+  entity "FavoriteLocation" do
+    string :name, optional: false
+  end
+
   # Examples:
   #
   # entity "Person" do
