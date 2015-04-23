@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
-
 gem 'rake'
-
+gem 'cdq'
 # ProMotion
 gem 'ProMotion', '~> 2.0'
 
