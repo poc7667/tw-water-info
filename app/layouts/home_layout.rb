@@ -6,8 +6,4 @@ class HomeLayout < MK::Layout
     end
   end
 
-  def main_style
-    background_color "#F9F9F9".uicolor
-  end
-
 end  
