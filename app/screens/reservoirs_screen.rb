@@ -12,13 +12,19 @@ class ReservoirsScreen < PM::TableScreen
     on_refresh
   end
 
+  def on_refresh
+    start_refreshing
+    get_reserviors
+    update_table_data
+    stop_refreshing
+  end  
 
   def table_data
     [{
         cells: $returned_data.map do |reservoir|
           {
             title: reservoir["title"],
-            subtitle: reservoir["delta"],
+            subtitle: reservoir["subtitle"],
             action: :select_reservoir,
             image:{
               image: reservoir["image"],
@@ -34,17 +40,10 @@ class ReservoirsScreen < PM::TableScreen
     PM.logger.info reservoir
   end 
 
-  def on_refresh
-    start_refreshing
-    get_reserviors
-    update_table_data
-    stop_refreshing
-  end  
 
   def get_reserviors
     # https://github.com/washwashsleep/TaiwanReservoirAPI
-    url_string = "http://128.199.223.114:10080/"
-    AFMotion::JSON.get(url_string) do |result|
+    AFMotion::JSON.get(RESERVOIR_API_URL) do |result|
       if result.success?
         $returned_data = []
         sorted_data = result.object["data"].sort_by{|h| get_percentage(h["immediatePercentage"])}
@@ -52,11 +51,13 @@ class ReservoirsScreen < PM::TableScreen
           reservoir = {
             "title" => [r["reservoirName"], r["immediatePercentage"]].join(":"),
             "value" => get_percentage(r["immediatePercentage"]),
+            "last_update_at" => r["lastedUpdateTime"].to_s,
             "income" => r["daliyInflow"].to_f - r["daliyOverflow"].to_f ,
             "baseAvailable" => r["baseAvailable"].gsub(',', '').to_f,
             "image" => WaterImage.get_image_by_percentage(get_percentage(r["immediatePercentage"]))
           }
           reservoir["delta"] = get_delta(reservoir)
+          reservoir["subtitle"] = reservoir["delta"].to_s + "  " + reservoir["last_update_at"]
           $returned_data << reservoir
         end
         update_table_data

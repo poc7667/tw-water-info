@@ -26,3 +26,4 @@ Motion::Project::App.setup do |app|
   app.codesign_certificate = 'iPhone Developer: Wei Cheng Hsu'
   app.provisioning_profile = '/Users/hsu-wei-cheng/workspace/rubymotion-projects/necessary_files/provision_on_poc_iPhone.mobileprovision'
 end
+task :"build:simulator" => :"schema:build"
