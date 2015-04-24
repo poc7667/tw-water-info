@@ -33,7 +33,3 @@ gem 'afmotion'
 gem 'awesome_print_motion', '~> 0.1'
 
 gem "bubble-wrap", "~> 1.3.0.osx"
-<<<<<<< Updated upstream
-=======
-# gem 'ProMotion-menu'
->>>>>>> Stashed changes
