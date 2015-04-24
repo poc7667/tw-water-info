@@ -1,5 +1,7 @@
 class ReservoirsScreen < PM::TableScreen
   refreshable callback: :on_refresh
+  searchable
+  longpressable
   title "台灣水庫資訊"
 
   def on_init
@@ -25,6 +27,10 @@ class ReservoirsScreen < PM::TableScreen
           {
             title: reservoir["title"],
             subtitle: reservoir["subtitle"],
+            # editing_style: :insert,
+            long_press_action: :show_menu,
+            editing_style: :delete,
+            moveable: true,
             action: :select_reservoir,
             image:{
               image: reservoir["image"],
@@ -35,6 +41,33 @@ class ReservoirsScreen < PM::TableScreen
         end
     }]
   end
+
+  def show_menu
+      UIAlertView.alert('加入關注列表',
+        # message: 'Don\'t worry, it\'ll be fine.',
+        buttons: ['OK', 'Cancel'],
+        ) do |button, button_index|
+        if button == 'OK'  # or: button_index == 1
+          print "you pressed OK"
+        elsif button == "Cancel"
+            print "nevermind"
+        end
+      end
+  end
+
+  def on_cell_deleted(cell)
+      # PM::logger(cell)
+      p cell[:arguments]
+      # matrixToDel=Matrix.where(:matrix_image).eq(cell[:arguments][:matrix_image])
+      # matrixToDel.first.destroy
+      # cdq.save
+      true
+  end
+  def long_press_action(cell)
+      PM::logger.info(cell)
+      # App.delegate.slide_menu.show_menu    
+  end
+
 
   def select_reservoir(reservoir)
     PM.logger.info reservoir

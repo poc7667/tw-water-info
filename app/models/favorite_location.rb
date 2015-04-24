@@ -1,0 +1,3 @@
+class FavoriteLocation < CDQManagedObject
+
+end
