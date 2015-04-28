@@ -1,3 +1,4 @@
+
 class ReservoirsScreen < PM::TableScreen
   refreshable callback: :on_refresh
   searchable
@@ -29,8 +30,8 @@ class ReservoirsScreen < PM::TableScreen
             subtitle: reservoir["subtitle"],
             # editing_style: :insert,
             long_press_action: :show_menu,
-            editing_style: :delete,
-            moveable: true,
+            # editing_style: :delete,
+            # moveable: true,
             action: :select_reservoir,
             image:{
               image: reservoir["image"],
@@ -40,6 +41,123 @@ class ReservoirsScreen < PM::TableScreen
           }
         end
     }]
+  end
+
+  def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
+    print(index.to_s)
+    print(cell["arguments"])
+    return true
+  end  
+  
+  def tableView(tableView, editingStyleForRowAtIndexPath:indexPath)
+    print "delete"
+    print indexPath
+  end  
+# https://raw.githubusercontent.com/annado/yambox.ios/0074b7fd0e08db46934860f67ae8587a1cc141f5/yambox/InboxListViewController.swift
+
+# swipeTableCell:(MGSwipeTableCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
+
+  def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
+    p "swipeTableCell deteced"
+    p index 
+    p direction
+    p fromExpansion
+  end
+
+  def swipeTableCell(cell, swipeButtonsForDirection: direction, swipeSettings: settings, expansionSettings: expansionSettings)
+    p "swipeTableCell deteced2"  
+  end
+
+# -(BOOL) swipeTableCell:(MGSwipeTableCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
+# {
+
+#     NSLog(@"Delegate: button tapped, %@ position, index %d, from Expansion: %@",
+#           direction == MGSwipeDirectionLeftToRight ? @"left" : @"right", (int)index, fromExpansion ? @"YES" : @"NO");
+
+#     if (direction == MGSwipeDirectionRightToLeft && index == 0) {
+#         //delete button
+#         NSIndexPath * path = [_tableView indexPathForCell:cell];
+#         [tests removeObjectAtIndex:path.row];
+#         [_tableView deleteRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationLeft];
+#         NSLog(@"Delete button pressed");
+#     }
+
+#     return YES;
+
+# }  
+
+# ) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
+#              swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
+
+    # func swipeTableCell(cell: MGSwipeTableCell!, tappedButtonAtIndex index: Int, direction: MGSwipeDirection, fromExpansion: Bool) -> Bool {
+    #     switch index {
+    #     case 0: // edit
+    #         editWord(cell)
+    #         break
+    #     case 1: // delete
+    #         removeWord(cell.tag)
+    #         break
+    #     default:
+    #         break
+    #     }
+    #     return true
+    # }  
+
+   # def swipeTableCell(cell, tappedButtonAtIndex: index, direction, fromExpansion)
+   #    print "swipeTableCell deteced"
+   #  end 
+
+# - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+  def tableView(tableView, cellForRowAtIndexPath: indexPath)
+    @reuseIdentifier ||= "CELL_IDENTIFIER"
+    cell = tableView.dequeueReusableCellWithIdentifier(@reuseIdentifier)
+    if (!cell) 
+      cell = MGSwipeTableCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier: @reuseIdentifier)
+    end
+    if indexPath.row.nil?
+      print "FUCK nil"
+    end
+    cell.textLabel.text = $returned_data[indexPath.row]["title"]
+    cell.detailTextLabel.text = $returned_data[indexPath.row]["subtitle"]
+
+    cell.leftButtons = [
+      # MGSwipeButton.buttonWithTitle("Delete", icon:UIImage.imageNamed("check.png"), backgroundColor:UIColor.greenColor),
+      MGSwipeButton.buttonWithTitle("Delete", icon:UIImage.imageNamed("check.png"), backgroundColor:UIColor.greenColor,callback: lambda do |sender|
+      p swipe_cell_clicked() end),
+      MGSwipeButton.buttonWithTitle("", icon:UIImage.imageNamed("fav.png"), backgroundColor:UIColor.blueColor)
+    ]    
+    cell.leftSwipeSettings.transition = MGSwipeTransition3D
+
+    cell.rightButtons = [MGSwipeButton.buttonWithTitle("Delete", backgroundColor:UIColor.redColor,callback: lambda do |sender|
+        i_want_to_delete_this_row(indexPath.row)
+    end)]
+    cell.rightSwipeSettings.transition = MGSwipeTransition3D
+    return cell
+  end  
+
+  def i_want_to_delete_this_row(rowIndex)
+    p "i_want_to_delete_this_row"
+    $returned_data.delete_at(rowIndex)
+    update_table_data
+  end
+
+
+  def swipe_cell_clicked()#(cell, index)
+    # @cell = cell
+    # selected = self.tableView.indexPathForSelectedRow
+    # me = "poc"
+    p "swipe_cell_clicked"
+    # p selected
+    # self.tableView.deleteRowsAtIndexPaths([index],
+    #     withRowAnimation:UITableViewRowAnimationMiddle)
+
+    # tableView.deleteRowsAtIndexPaths ($returned_data.count -1)
+    # tableView.reloadData
+    # p cell.methods
+    # p cell.textLabel.text
+    # on_cell_deleted(cell)
+    # p cell.title
+    # true
   end
 
   def show_menu
@@ -112,3 +230,5 @@ class ReservoirsScreen < PM::TableScreen
   end
 
 end
+
+# https://gist.github.com/poc7667/12aa2c8355871816114a
