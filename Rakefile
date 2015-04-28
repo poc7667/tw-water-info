@@ -7,7 +7,6 @@ Bundler.require
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
-
   app.name = 'water_info'  
   app.icons = ["water-drop.png"]
   app.info_plist['UILaunchImages'] = [
@@ -26,10 +25,11 @@ Motion::Project::App.setup do |app|
   app.pods do
     pod 'MGSwipeTableCell'
   end
-
+  # DBT.analyze(app)
 
   app.identifier = 'com.4amStudio.water_info'
   app.codesign_certificate = 'iPhone Developer: Wei Cheng Hsu'
   app.provisioning_profile = '/Users/hsu-wei-cheng/workspace/rubymotion-projects/necessary_files/provision_on_poc_iPhone.mobileprovision'
 end
 task :"build:simulator" => :"schema:build"
+
