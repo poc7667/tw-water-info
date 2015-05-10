@@ -43,30 +43,30 @@ class ReservoirsScreen < PM::TableScreen
     }]
   end
 
-  def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
-    print(index.to_s)
-    print(cell["arguments"])
-    return true
-  end  
+  # def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
+  #   print(index.to_s)
+  #   print(cell["arguments"])
+  #   return true
+  # end  
   
-  def tableView(tableView, editingStyleForRowAtIndexPath:indexPath)
-    print "delete"
-    print indexPath
-  end  
+  # def tableView(tableView, editingStyleForRowAtIndexPath:indexPath)
+  #   print "delete"
+  #   print indexPath
+  # end  
 # https://raw.githubusercontent.com/annado/yambox.ios/0074b7fd0e08db46934860f67ae8587a1cc141f5/yambox/InboxListViewController.swift
 
 # swipeTableCell:(MGSwipeTableCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
 
-  def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
-    p "swipeTableCell deteced"
-    p index 
-    p direction
-    p fromExpansion
-  end
+  # def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
+  #   p "swipeTableCell deteced"
+  #   p index 
+  #   p direction
+  #   p fromExpansion
+  # end
 
-  def swipeTableCell(cell, swipeButtonsForDirection: direction, swipeSettings: settings, expansionSettings: expansionSettings)
-    p "swipeTableCell deteced2"  
-  end
+  # def swipeTableCell(cell, swipeButtonsForDirection: direction, swipeSettings: settings, expansionSettings: expansionSettings)
+  #   p "swipeTableCell deteced2"  
+  # end
 
 # -(BOOL) swipeTableCell:(MGSwipeTableCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
 # {
@@ -111,15 +111,10 @@ class ReservoirsScreen < PM::TableScreen
   def tableView(tableView, cellForRowAtIndexPath: indexPath)
     @reuseIdentifier ||= "CELL_IDENTIFIER"
     cell = tableView.dequeueReusableCellWithIdentifier(@reuseIdentifier)
-    if (!cell) 
-      cell = MGSwipeTableCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier: @reuseIdentifier)
-    end
-    if indexPath.row.nil?
-      print "FUCK nil"
-    end
+    cell ||= MGSwipeTableCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier: @reuseIdentifier)
     cell.textLabel.text = $returned_data[indexPath.row]["title"]
     cell.detailTextLabel.text = $returned_data[indexPath.row]["subtitle"]
-
+    cell.delegate = self
     cell.leftButtons = [
       # MGSwipeButton.buttonWithTitle("Delete", icon:UIImage.imageNamed("check.png"), backgroundColor:UIColor.greenColor),
       MGSwipeButton.buttonWithTitle("Delete", icon:UIImage.imageNamed("check.png"), backgroundColor:UIColor.greenColor,callback: lambda do |sender|
