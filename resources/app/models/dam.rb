@@ -1,0 +1,3 @@
+class Dam < CDQManagedObject
+
+end

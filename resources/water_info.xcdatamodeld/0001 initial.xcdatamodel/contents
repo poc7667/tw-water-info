@@ -3,4 +3,12 @@
   <entity name="FavoriteLocation" syncable="YES" representedClassName="FavoriteLocation">
     <attribute optional="NO" syncable="YES" attributeType="String" name="name"/>
   </entity>
+  <entity name="Dam" syncable="YES" representedClassName="Dam">
+    <attribute optional="NO" syncable="YES" attributeType="String" name="name"/>
+    <attribute optional="YES" syncable="YES" attributeType="Float" name="percentage" defaultValueString="0"/>
+    <attribute optional="YES" syncable="YES" attributeType="Float" name="delta" defaultValueString="0"/>
+    <attribute optional="YES" syncable="YES" attributeType="Date" name="last_update_at"/>
+    <attribute optional="YES" syncable="YES" attributeType="Boolean" name="favorite" defaultValueString="NO"/>
+    <attribute optional="YES" syncable="YES" attributeType="Integer 32" name="order" defaultValueString="0"/>
+  </entity>
 </model>
