@@ -6,8 +6,13 @@ class ReservoirsScreen < PM::TableScreen
   title "台灣水庫資訊"
 
   def on_init
-    set_nav_bar_button :right, title: "Help", action: :show_help
+    # set_nav_bar_button :right, title: "Help", action: :show_help
+    set_nav_bar_button :right, title: "Setting", action: :show_settings
     set_tab_bar_item title: "水庫資訊", item: "tabs_icon/show-all.png"
+  end
+
+  def show_settings
+    open SettingMenuForm.new(nav_bar: true), modal: true
   end
 
   def on_load
@@ -43,71 +48,6 @@ class ReservoirsScreen < PM::TableScreen
     }]
   end
 
-  # def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
-  #   print(index.to_s)
-  #   print(cell["arguments"])
-  #   return true
-  # end  
-  
-  # def tableView(tableView, editingStyleForRowAtIndexPath:indexPath)
-  #   print "delete"
-  #   print indexPath
-  # end  
-# https://raw.githubusercontent.com/annado/yambox.ios/0074b7fd0e08db46934860f67ae8587a1cc141f5/yambox/InboxListViewController.swift
-
-# swipeTableCell:(MGSwipeTableCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
-
-  # def swipeTableCell(cell, tappedButtonAtIndex: index, direction: direction, fromExpansion: fromExpansion)
-  #   p "swipeTableCell deteced"
-  #   p index 
-  #   p direction
-  #   p fromExpansion
-  # end
-
-  # def swipeTableCell(cell, swipeButtonsForDirection: direction, swipeSettings: settings, expansionSettings: expansionSettings)
-  #   p "swipeTableCell deteced2"  
-  # end
-
-# -(BOOL) swipeTableCell:(MGSwipeTableCell*) cell tappedButtonAtIndex:(NSInteger) index direction:(MGSwipeDirection)direction fromExpansion:(BOOL) fromExpansion
-# {
-
-#     NSLog(@"Delegate: button tapped, %@ position, index %d, from Expansion: %@",
-#           direction == MGSwipeDirectionLeftToRight ? @"left" : @"right", (int)index, fromExpansion ? @"YES" : @"NO");
-
-#     if (direction == MGSwipeDirectionRightToLeft && index == 0) {
-#         //delete button
-#         NSIndexPath * path = [_tableView indexPathForCell:cell];
-#         [tests removeObjectAtIndex:path.row];
-#         [_tableView deleteRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationLeft];
-#         NSLog(@"Delete button pressed");
-#     }
-
-#     return YES;
-
-# }  
-
-# ) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
-#              swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
-
-    # func swipeTableCell(cell: MGSwipeTableCell!, tappedButtonAtIndex index: Int, direction: MGSwipeDirection, fromExpansion: Bool) -> Bool {
-    #     switch index {
-    #     case 0: // edit
-    #         editWord(cell)
-    #         break
-    #     case 1: // delete
-    #         removeWord(cell.tag)
-    #         break
-    #     default:
-    #         break
-    #     }
-    #     return true
-    # }  
-
-   # def swipeTableCell(cell, tappedButtonAtIndex: index, direction, fromExpansion)
-   #    print "swipeTableCell deteced"
-   #  end 
-
-# - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
   def tableView(tableView, cellForRowAtIndexPath: indexPath)
     @reuseIdentifier ||= "CELL_IDENTIFIER"
     cell = tableView.dequeueReusableCellWithIdentifier(@reuseIdentifier)
@@ -138,26 +78,11 @@ class ReservoirsScreen < PM::TableScreen
 
 
   def swipe_cell_clicked()#(cell, index)
-    # @cell = cell
-    # selected = self.tableView.indexPathForSelectedRow
-    # me = "poc"
     p "swipe_cell_clicked"
-    # p selected
-    # self.tableView.deleteRowsAtIndexPaths([index],
-    #     withRowAnimation:UITableViewRowAnimationMiddle)
-
-    # tableView.deleteRowsAtIndexPaths ($returned_data.count -1)
-    # tableView.reloadData
-    # p cell.methods
-    # p cell.textLabel.text
-    # on_cell_deleted(cell)
-    # p cell.title
-    # true
   end
 
   def show_menu
       UIAlertView.alert('加入關注列表',
-        # message: 'Don\'t worry, it\'ll be fine.',
         buttons: ['OK', 'Cancel'],
         ) do |button, button_index|
         if button == 'OK'  # or: button_index == 1
@@ -169,11 +94,7 @@ class ReservoirsScreen < PM::TableScreen
   end
 
   def on_cell_deleted(cell)
-      # PM::logger(cell)
       p cell[:arguments]
-      # matrixToDel=Matrix.where(:matrix_image).eq(cell[:arguments][:matrix_image])
-      # matrixToDel.first.destroy
-      # cdq.save
       true
   end
   def long_press_action(cell)
@@ -211,12 +132,16 @@ class ReservoirsScreen < PM::TableScreen
     end 
   end
 
+  def method_name
+    
+  end
+
   def get_delta(reservoir)
     delta = (100*reservoir["income"]/reservoir["baseAvailable"]).round(2)
     if delta.abs > 0.0001
-      return delta.to_s + " %"
+      delta.to_s + " %"
     else
-      return  "Not enough data"
+      "Not enough data"
     end
   end
 

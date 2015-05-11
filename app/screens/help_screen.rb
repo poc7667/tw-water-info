@@ -52,6 +52,7 @@ class HelpScreen < PM::GroupedTableScreen
   end
   
   def switched(args={})
+    # switched_value args[:value]
     App.alert "#{args[:message]} - value: #{args[:value]}"
   end
   
